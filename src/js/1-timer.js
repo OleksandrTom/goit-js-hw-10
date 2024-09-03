@@ -17,6 +17,8 @@ const hourScoreboard = document.querySelector('[data-hours]');
 const minuteScoreboard = document.querySelector('[data-minutes]');
 const secondScoreboard = document.querySelector('[data-seconds]');
 
+startBtn.addEventListener('click', startTimer);
+
 let userSelectedDate = null;
 
 const options = {
@@ -27,7 +29,6 @@ const options = {
   onClose(selectedDates) {
     if (selectedDates[0] > options.defaultDate) {
       // Розблокування кнопки Start при обранні валідної дати
-      startBtn.addEventListener('click', startTimer);
       startBtn.classList.add('is-active-btn');
     } else {
       startBtn.removeEventListener('click', startTimer);
@@ -46,6 +47,8 @@ const options = {
 // Ініціалізація бібліотеки flatpickr на елементі input
 flatpickr('#datetime-picker', options);
 
+let intervalTime;
+
 // Функція старту відліку часу
 function startTimer(event) {
   // Блокування кнопки Start при старті відліку часу на таймері
@@ -53,7 +56,8 @@ function startTimer(event) {
   startBtn.classList.remove('is-active-btn');
   // Блокування елементу input при старті відліку часу на таймері
   input.disabled = true;
-  const intervalTime = setInterval(convertMs, 1000);
+   intervalTime = setInterval(convertMs, 1000);
+   
 }
 
 // Функція підрахунку значень
@@ -78,6 +82,8 @@ function convertMs() {
 
     addLeadingZero(days, hours, minutes, seconds);
   } else {
+    // Зупинка циклу intervalTime
+    clearInterval(intervalTime)
     // Розблокування елементу input по спливу часу на таймері
     input.disabled = false;
   }
